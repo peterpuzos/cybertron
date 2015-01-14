@@ -1,13 +1,7 @@
 {
-  "author": "Josh David Miller",
-  "name": "ngbp",
-  "version": "0.3.2",
-  "homepage": "https://github.com/ngbp/ngbp",
-  "licenses": {
-    "type": "MIT",
-    "url": "https://raw.github.com/ngbp/ngbp/master/LICENSE"
-  },
-  "bugs": "https://github.com/ngbp/ngbp/issues",
+  "author": "HZ",
+  "name": "datatron",
+  "version": "0.0.1",
   "repository": {
     "type": "git",
     "url": "git@github.com:ngbp/ngbp.git"
@@ -22,7 +16,7 @@
     "grunt-contrib-concat": "^0.3.0",
     "grunt-contrib-watch": "^0.4.4",
     "grunt-contrib-uglify": "^0.2.7",
-    "grunt-ngmin": "0.0.2",
+    "grunt-ng-annotate": "",
     "grunt-html2js": "^0.1.9",
     "grunt-contrib-coffee": "^0.7.0",
     "grunt-coffeelint": "~0.0.10",

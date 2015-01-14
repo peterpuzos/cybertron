@@ -1,8 +1,8 @@
-angular.module( 'ngBoilerplate', [
+angular.module( 'datatron', [
   'templates-app',
   'templates-common',
-  'ngBoilerplate.home',
-  'ngBoilerplate.about',
+  'datatron.home',
+  'datatron.about',
   'ui.router'
 ])
 

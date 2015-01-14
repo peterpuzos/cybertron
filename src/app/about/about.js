@@ -1,4 +1,4 @@
-angular.module( 'ngBoilerplate.about', [
+angular.module( 'datatron.about', [
   'ui.router',
   'placeholders',
   'ui.bootstrap'
