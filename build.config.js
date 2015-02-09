@@ -68,7 +68,9 @@ module.exports = {
       'vendor/placeholders/angular-placeholders-0.0.1-SNAPSHOT.min.js',
       'vendor/solstice/dist/solstice.min.js',
       'vendor/angular-ui-router/release/angular-ui-router.js',
-      'vendor/angular-ui-utils/modules/route/route.js'
+      'vendor/angular-ui-utils/modules/route/route.js',
+      'vendor/d3/d3.min.js',
+      'vendor/angular-charts/dist/angular-charts.min.js'
     ],
     css: [
       

@@ -2,11 +2,13 @@ angular.module( 'datatron.search', [
   'ui.router',
   'placeholders',
   'ui.bootstrap',
-  'datatron.search.searchbox'
+  'datatron.search.searchbox',
+  'solstice',
+  'angularCharts'
 ])
 
 // config for defining controller and template
-.config(function config( $stateProvider ) {
+.config(function config( $stateProvider, SolsticeProvider) {
   $stateProvider.state( 'search', {
     url: '/search',
     views: {
@@ -17,6 +19,8 @@ angular.module( 'datatron.search', [
     },
     data:{ pageTitle: 'Search' }
   });
+  
+  SolsticeProvider.setEndpoint('http://quickstart.cloudera:8983/solr/jobs_demo_shard1_replica1');
 })
 
 .controller( 'SearchCtrl', function SearchCtrl( $scope, Solstice ) {
@@ -24,7 +28,7 @@ angular.module( 'datatron.search', [
     // $scope vars
     $scope.searchResult = "No Results";
     $scope.facetResult = "No Results";
-
+    
     $scope.availableSearchParams = [
           { key: "name", name: "Name", placeholder: "Name..." },
           { key: "city", name: "City", placeholder: "City..." },
@@ -33,16 +37,17 @@ angular.module( 'datatron.search', [
           { key: "phone", name: "Phone", placeholder: "Phone..." }
         ];
         
-    // $scope functions
+    
     
     // search all terms
     $scope.searchAll = function() {
-        var queries = [];
         
+        // Variables For Queries and Search
+        var queries = [];
         var query = "";
         $scope.searchResult = {};
         $scope.facetResult = {};
-        
+       
         //searchParams
         angular.forEach($scope.searchParams, function(values, key) {
             switch(key) {
@@ -59,8 +64,11 @@ angular.module( 'datatron.search', [
             
          });
          
+         $scope.graphResults = [];
          var docs;
          var facets;
+         var graphResult = {};
+         var slice;
          
          // break down each query into separate calls to SOLR
          angular.forEach(queries, function(val) {
@@ -70,6 +78,7 @@ angular.module( 'datatron.search', [
                 //sort: 'published desc',
                 facet: true,
                 "facet.field": "description",
+                "facet.mincount": 1,
                 rows: 10
             })
             .then(function (result){
@@ -81,11 +90,75 @@ angular.module( 'datatron.search', [
                     $scope.searchResult[key] = docs;
                     $scope.facetResult[key] = facets;
                 } else {
-                    $scope.searchResult[key] = "No Results Found!";
-                    $scope.facetResult[key] = "No Results Found!";
+                    $scope.searchResult[key] = null;
+                    $scope.facetResult[key] = null;
+                }
+                
+                graphResult = {};
+                angular.forEach($scope.facetResult, function(facetVal, searchTerm) {
+                if (facetVal) {
+                    graphResult.chTitle = searchTerm;
+
+                    angular.forEach(facetVal, function(terms, facet) {
+                        graphResult.chConfig = {
+                            "title": facet,
+                            tooltips: true,
+                            labels: false,
+                            mouseover: function() {},
+                            mouseout: function() {},
+                            click: function() {},
+                            legend: {
+                              display: true,
+                              //could be 'left, right'
+                              position: 'right'
+                            }
+                        };
+                        graphResult.chData = [];
+                        slice = {};
+                        for (var i=0; i<terms.length; i++) {
+                            if ( (i+2)%2 === 0) {
+                                slice.x = terms[i];
+                            } else {
+                                slice.y = terms[i];
+                                graphResult.chData.push(slice);
+                                slice = {};
+                            }
+                        }
+                    });
+                    $scope.graphResults.push(graphResult);
                 }
             });
+            });
          });
+         
+//        $scope.chartConfig = {
+//            "title": "Products",
+//            tooltips: true,
+//            labels: false,
+//            mouseover: function() {},
+//            mouseout: function() {},
+//            click: function() {},
+//            legend: {
+//              display: true,
+//              //could be 'left, right'
+//              position: 'right'
+//            }
+//        };
+//        $scope.data = {
+//            data: [{
+//              x: "Laptops",
+//              y: [100]
+//            }, {
+//              x: "Desktops",
+//              y: [300]
+//            }, {
+//              x: "Mobiles",
+//              y: [351]
+//            }, {
+//              x: "Tablets",
+//              y: [54]
+//            }]
+//        };
 
     };
     

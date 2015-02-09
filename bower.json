@@ -8,7 +8,8 @@
     "angular-bootstrap": "~0.10.0",
     "angular-ui-router": "~0.2",
     "solstice": "~0.0.2",
-    "angular-advanced-searchbox": "~1.0.0"
+    "angular-advanced-searchbox": "~1.0.0",
+    "angular-charts": "~0.2.7"
   },
   "dependencies": {}
 }

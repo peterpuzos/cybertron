@@ -26,9 +26,9 @@ angular.module( 'datatron.search.searchbox' , [])
 //                        updateModel();
 //                    });
 
-                    $scope.$watch('searchParams', function () {
-                        updateModel();
-                    }, true);
+//                    $scope.$watch('searchParams', function () {
+//                        updateModel();
+//                    }, true);
 
                     $scope.enterEditMode = function(index) {
                         if (index === undefined) {
@@ -44,11 +44,12 @@ angular.module( 'datatron.search.searchbox' , [])
                         }
                         var searchParam = $scope.searchParams[index];
                         searchParam.editMode = false;
-
+                            
                         // remove empty search params
                         if (!searchParam.value) {
                             $scope.removeSearchParam(index);
                         }
+                        updateModel();
                     };
 
                     $scope.typeaheadOnSelect = function (item, model, label) {
@@ -70,6 +71,7 @@ angular.module( 'datatron.search.searchbox' , [])
                                 editMode: enterEditModel
                             }
                         );
+                        updateModel();
 
                         //TODO: hide used suggestion
                     };
@@ -148,7 +150,14 @@ angular.module( 'datatron.search.searchbox' , [])
                             if (searchParamIndex < $scope.searchParams.length) {
                                 $scope.editNext(searchParamIndex);
                             } else {
-                                $scope.searchAll();
+                                if (e.target.value !== '') {
+                                    $scope.addSearchParam(defaultParam, e.target.value, false);
+                                    e.target.value = '';
+                                }
+                                // $timeout had to be used as we needed to wait for $scope to update
+                                $timeout( function () {
+                                    $scope.searchAll();
+                                }, 0);
                             }
 //                        } else if (e.which == 32) { // space
 //                            e.preventDefault();
@@ -184,17 +193,9 @@ angular.module( 'datatron.search.searchbox' , [])
                         restoreModel();
                     }
 
-                    var searchThrottleTimer;
                     function updateModel() {
-                        if (searchThrottleTimer) {
-                            $timeout.cancel(searchThrottleTimer);
-                        }
-                        searchThrottleTimer = $timeout(function () {
                             $scope.model = {};
-
-//                            if ($scope.searchQuery.length > 0) {
-//                                $scope.model.query = $scope.searchQuery;
-//                            }
+                            
                             angular.forEach($scope.searchParams, function (param) {
                                 if (param.value !== undefined && param.value.length > 0) {
                                     if (param.key in $scope.model) {
@@ -204,7 +205,6 @@ angular.module( 'datatron.search.searchbox' , [])
                                     }
                                 }
                             });
-                        }, 500);
                     }
                     
                     $scope.moveCursorToEnd = function(el) {

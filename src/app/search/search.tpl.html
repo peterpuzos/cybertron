@@ -7,5 +7,14 @@
             <pre><code>{{searchResult}}</code></pre>
             <strong>Facet Results:</strong>
             <pre><code>{{facetResult}}</code></pre>
+            <div class="facetChart" ng-repeat="graphResult in graphResults" ng-show="graphResults.length > 0">
+                <h3>{{graphResult.title}}</h3>
+                <div 
+                    ac-chart="'pie'" 
+                    ac-data="graphResult.chData" 
+                    ac-config="graphResult.chConfig" 
+                    class='chart'>
+                </div>
+            </div>
         </div>
 </div>

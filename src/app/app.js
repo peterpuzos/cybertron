@@ -3,14 +3,11 @@ angular.module( 'datatron', [
   'templates-common',
   'datatron.home',
   'datatron.search',
-  'ui.router',
-  'solstice'
+  'ui.router'
 ])
 
-.config( function datatronConfig ( $stateProvider, $urlRouterProvider, SolsticeProvider) {
+.config( function datatronConfig ( $stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise( '/home' );
-  
-  SolsticeProvider.setEndpoint('http://quickstart.cloudera:8983/solr/jobs_demo_shard1_replica1');
 })
 
 .run( function run () {
