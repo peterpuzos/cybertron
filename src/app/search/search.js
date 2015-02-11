@@ -4,11 +4,18 @@ angular.module( 'datatron.search', [
   'ui.bootstrap',
   'datatron.search.searchbox',
   'solstice',
-  'angularCharts'
+  'highcharts-ng'
 ])
+
+.value('setup', {
+    queryField: 'record',
+    facetFields: ['country_name', 'city', 'app', 'subapp']
+})
 
 // config for defining controller and template
 .config(function config( $stateProvider, SolsticeProvider) {
+  SolsticeProvider.setEndpoint('http://quickstart.cloudera:8983/solr/log_analytics_demo_shard1_replica1');  
+    
   $stateProvider.state( 'search', {
     url: '/search',
     views: {
@@ -19,11 +26,9 @@ angular.module( 'datatron.search', [
     },
     data:{ pageTitle: 'Search' }
   });
-  
-  SolsticeProvider.setEndpoint('http://quickstart.cloudera:8983/solr/jobs_demo_shard1_replica1');
 })
 
-.controller( 'SearchCtrl', function SearchCtrl( $scope, Solstice ) {
+.controller( 'SearchCtrl', function SearchCtrl( $scope, $q, Solstice, setup) {
     
     // $scope vars
     $scope.searchResult = "No Results";
@@ -36,8 +41,6 @@ angular.module( 'datatron.search', [
           { key: "emailAddress", name: "E-Mail", placeholder: "E-Mail..." },
           { key: "phone", name: "Phone", placeholder: "Phone..." }
         ];
-        
-    
     
     // search all terms
     $scope.searchAll = function() {
@@ -45,15 +48,13 @@ angular.module( 'datatron.search', [
         // Variables For Queries and Search
         var queries = [];
         var query = "";
-        $scope.searchResult = {};
-        $scope.facetResult = {};
-       
+
         //searchParams
         angular.forEach($scope.searchParams, function(values, key) {
             switch(key) {
                 case "query":
                    angular.forEach(values, function(val) {
-                      query = "description:" + val; 
+                      query = setup.queryField + ":" + val; 
                       queries.push(query);
                    });
                    break;
@@ -64,24 +65,30 @@ angular.module( 'datatron.search', [
             
          });
          
-         $scope.graphResults = [];
-         var docs;
-         var facets;
-         var graphResult = {};
-         var slice;
+        $scope.searchResult = {};
+        $scope.facetResult = {};
+        $scope.graphResults = {};
+
+        var docs;
+        var facets;
+        
+        var chartConfigs;
+        var slice;
          
-         // break down each query into separate calls to SOLR
-         angular.forEach(queries, function(val) {
+        angular.forEach(queries, function(val) {
+             docs = "";
+             facets = "";
+             chartConfig = "";
+
              Solstice.search({
                 q: val,
-                //fl: 'title, teaser, published',
-                //sort: 'published desc',
                 facet: true,
-                "facet.field": "description",
+                "facet.field": setup.facetFields,
                 "facet.mincount": 1,
                 rows: 10
-            })
+             })
             .then(function (result){
+                
                 console.log(result.data);
                 docs = result.data.response.docs;
                 facets = result.data.facet_counts.facet_fields;
@@ -89,77 +96,67 @@ angular.module( 'datatron.search', [
                 if (docs.length > 0) {
                     $scope.searchResult[key] = docs;
                     $scope.facetResult[key] = facets;
+                    $scope.graphResults[key] = drawGraphResults(key, facets);
+                    console.log($scope.graphResults);
                 } else {
                     $scope.searchResult[key] = null;
                     $scope.facetResult[key] = null;
                 }
-                
-                graphResult = {};
-                angular.forEach($scope.facetResult, function(facetVal, searchTerm) {
+            });
+        });
+        
+        
+        
+        // Creates facet graphs using HighCharts
+        function drawGraphResults(searchTerm,facets) {
+            chartConfigs = [];
+            angular.forEach(facets, function(facetVal, facetName) {
                 if (facetVal) {
-                    graphResult.chTitle = searchTerm;
+                    
+                    var chartConfig = {
+                            chID: searchTerm + '-' + facetName,
+                            //This is not a highcharts object. It just looks a little like one!
+                            options: {
+                                //This is the Main Highcharts chart config. Any Highchart options are valid here.
+                                //will be ovverriden by values specified below.
+                                chart: {
+                                    type: 'pie'
+                                },
+                                tooltip: {
+                                    style: {
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            loading: false,
+                            size: {
+                                width: 300,
+                                height: 300
+                            }
+                    };
 
-                    angular.forEach(facetVal, function(terms, facet) {
-                        graphResult.chConfig = {
-                            "title": facet,
-                            tooltips: true,
-                            labels: false,
-                            mouseover: function() {},
-                            mouseout: function() {},
-                            click: function() {},
-                            legend: {
-                              display: true,
-                              //could be 'left, right'
-                              position: 'right'
-                            }
-                        };
-                        graphResult.chData = [];
-                        slice = {};
-                        for (var i=0; i<terms.length; i++) {
-                            if ( (i+2)%2 === 0) {
-                                slice.x = terms[i];
-                            } else {
-                                slice.y = terms[i];
-                                graphResult.chData.push(slice);
-                                slice = {};
-                            }
+                    chartConfig.title = {};
+                    chartConfig.series = [];
+
+                    chartConfig.title.text = angular.uppercase(facetName);
+
+                    var chData = [];
+                    slice = {};
+                    for (var i=0; i<facetVal.length; i++) {
+                        if ( (i+2)%2 === 0) {
+                            slice.name = facetVal[i];
+                        } else {
+                            slice.y = facetVal[i];
+                            chData.push(slice);
+                            slice = {};
                         }
-                    });
-                    $scope.graphResults.push(graphResult);
+                    }
+                    chartConfig.series.push({id: searchTerm + "-" + facetName, name: "count", data: chData});
+                    chartConfigs.push(chartConfig);
                 }
             });
-            });
-         });
-         
-//        $scope.chartConfig = {
-//            "title": "Products",
-//            tooltips: true,
-//            labels: false,
-//            mouseover: function() {},
-//            mouseout: function() {},
-//            click: function() {},
-//            legend: {
-//              display: true,
-//              //could be 'left, right'
-//              position: 'right'
-//            }
-//        };
-//        $scope.data = {
-//            data: [{
-//              x: "Laptops",
-//              y: [100]
-//            }, {
-//              x: "Desktops",
-//              y: [300]
-//            }, {
-//              x: "Mobiles",
-//              y: [351]
-//            }, {
-//              x: "Tablets",
-//              y: [54]
-//            }]
-//        };
-
+            return chartConfigs;
+        }
     };
     
     
