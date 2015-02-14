@@ -9,7 +9,14 @@ angular.module( 'datatron.search', [
 
 .value('setup', {
     queryField: 'record',
-    facetFields: ['country_name', 'city', 'app', 'subapp']
+    facetFields: ['extension', 'app', 'subapp'],
+    dateFacets: {   date:'time', 
+                    date_start:'2014-05-04T00:00:00Z',
+                    date_end:'2014-05-05T00:00:00Z',
+                    date_gap:'+1HOUR'
+                },
+    width: '300',
+    height: '300'
 })
 
 // config for defining controller and template
@@ -34,6 +41,23 @@ angular.module( 'datatron.search', [
     $scope.searchResult = "No Results";
     $scope.facetResult = "No Results";
     
+    $scope.allFacets = function() {
+        Solstice.search({
+                q: '*:*',
+                facet: true,
+                rows: 0,
+                "facet.field": setup.facetFields,
+                "facet.mincount": 1,
+                "facet.date": setup.date,
+                "facet.date.start": setup.date_start,
+                "facet.date.end": setup.date_end,
+                "facet.date.gap": setup.date_gap
+             })
+            .then(function (result){
+                
+             });
+    };
+    
     $scope.availableSearchParams = [
           { key: "name", name: "Name", placeholder: "Name..." },
           { key: "city", name: "City", placeholder: "City..." },
@@ -41,6 +65,8 @@ angular.module( 'datatron.search', [
           { key: "emailAddress", name: "E-Mail", placeholder: "E-Mail..." },
           { key: "phone", name: "Phone", placeholder: "Phone..." }
         ];
+        
+   
     
     // search all terms
     $scope.searchAll = function() {
@@ -126,12 +152,20 @@ angular.module( 'datatron.search', [
                                     style: {
                                         fontWeight: 'bold'
                                     }
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        size: "100%",
+                                        dataLabels: {
+                                            enabled: false
+                                        }
+                                    }
                                 }
                             },
                             loading: false,
                             size: {
-                                width: 300,
-                                height: 300
+                                width: setup.width,
+                                height: setup.height
                             }
                     };
 
