@@ -3,10 +3,11 @@
             <nit-advanced-searchbox ng-model="searchParams" parameters="availableSearchParams" search-all="searchAll" placeholder="Search..."></nit-advanced-searchbox>
             <strong>Query Terms:</strong>
             <pre><code>{{searchParams}}</code></pre>
-                
+ <!--               
             <div class="facetPieCharts" ng-repeat="(graphName, graphResult) in allFacets">
                 <highchart ng-repeat="graph in graphResult" id="{{graph.chID}}" config="graph" class="facetPie"></highchart>
             </div>
+-->
 <!--
             <strong>Search Results:</strong>
             <pre><code>{{searchResult}}</code></pre>
@@ -15,9 +16,14 @@
             <strong>Facet Results:</strong>
             <pre><code>{{facetResult}}</code></pre>
 -->
-            <div class="facetPieCharts" ng-repeat="(graphName, graphResult) in graphResults">    
+            <div class="facetPieCharts" ng-repeat="(graphName, graphResult) in graphPieResults">    
                 <h3>Search Term: {{graphName}}</h3>
                 <highchart ng-repeat="graph in graphResult" id="{{graph.chID}}" config="graph" class="facetPie"></highchart>
+            </div>
+
+            <div class="facetDateCharts" ng-repeat="(graphName, graphResult) in graphDateResults">    
+                <h3>Search Term: {{graphName}}</h3>
+                <highchart ng-repeat="graph in graphResult" id="{{graph.chID}}" config="graph" class="facetDate"></highchart>
             </div>
         </div>
 </div>

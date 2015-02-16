@@ -41,22 +41,22 @@ angular.module( 'datatron.search', [
     $scope.searchResult = "No Results";
     $scope.facetResult = "No Results";
     
-    $scope.allFacets = function() {
-        Solstice.search({
-                q: '*:*',
-                facet: true,
-                rows: 0,
-                "facet.field": setup.facetFields,
-                "facet.mincount": 1,
-                "facet.date": setup.date,
-                "facet.date.start": setup.date_start,
-                "facet.date.end": setup.date_end,
-                "facet.date.gap": setup.date_gap
-             })
-            .then(function (result){
-                
-             });
-    };
+//    $scope.allFacets = function() {
+//        Solstice.search({
+//                q: '*:*',
+//                facet: true,
+//                rows: 0,
+//                "facet.field": setup.facetFields,
+//                "facet.mincount": 1,
+//                "facet.date": setup.date,
+//                "facet.date.start": setup.date_start,
+//                "facet.date.end": setup.date_end,
+//                "facet.date.gap": setup.date_gap
+//             })
+//            .then(function (result){
+//                
+//             });
+//    };
     
     $scope.availableSearchParams = [
           { key: "name", name: "Name", placeholder: "Name..." },
@@ -93,10 +93,12 @@ angular.module( 'datatron.search', [
          
         $scope.searchResult = {};
         $scope.facetResult = {};
-        $scope.graphResults = {};
+        $scope.graphPieResults = {};
+        $scope.graphDateResults = {};
 
         var docs;
         var facets;
+        var dateFacets;
         
         var chartConfigs;
         var slice;
@@ -104,6 +106,8 @@ angular.module( 'datatron.search', [
         angular.forEach(queries, function(val) {
              docs = "";
              facets = "";
+             dateFacets = "";
+             
              chartConfig = "";
 
              Solstice.search({
@@ -111,19 +115,24 @@ angular.module( 'datatron.search', [
                 facet: true,
                 "facet.field": setup.facetFields,
                 "facet.mincount": 1,
-                rows: 10
+                "facet.date": setup.dateFacets.date,
+                "facet.date.start": setup.dateFacets.date_start,
+                "facet.date.end": setup.dateFacets.date_end,
+                "facet.date.gap": setup.dateFacets.date_gap
              })
             .then(function (result){
                 
                 console.log(result.data);
                 docs = result.data.response.docs;
                 facets = result.data.facet_counts.facet_fields;
+                dateFacets = result.data.facet_counts.facet_dates;
+                
                 key = val.substr(val.indexOf(':')+1,val.length);
                 if (docs.length > 0) {
                     $scope.searchResult[key] = docs;
                     $scope.facetResult[key] = facets;
-                    $scope.graphResults[key] = drawGraphResults(key, facets);
-                    console.log($scope.graphResults);
+                    $scope.graphPieResults[key] = drawPieGraphResults(key, facets);
+                    $scope.graphDateResults[key] = drawDateGraphResults(key, dateFacets);
                 } else {
                     $scope.searchResult[key] = null;
                     $scope.facetResult[key] = null;
@@ -134,7 +143,7 @@ angular.module( 'datatron.search', [
         
         
         // Creates facet graphs using HighCharts
-        function drawGraphResults(searchTerm,facets) {
+        function drawPieGraphResults(searchTerm,facets) {
             chartConfigs = [];
             angular.forEach(facets, function(facetVal, facetName) {
                 if (facetVal) {
@@ -191,7 +200,61 @@ angular.module( 'datatron.search', [
             });
             return chartConfigs;
         }
-    };
+        
+        // Creates date facet graphs using HighCharts
+        function drawDateGraphResults(searchTerm, dateFacets) {
+            chartConfigs = [];
+            angular.forEach(dateFacets, function(facetVal, facetName) {
+                if (facetVal) {
+                    
+                    var chartConfig = {
+                            chID: searchTerm + '-' + facetName,
+                            //This is not a highcharts object. It just looks a little like one!
+                            options: {
+                                //This is the Main Highcharts chart config. Any Highchart options are valid here.
+                                //will be ovverriden by values specified below.
+                                chart: {
+                                    type: 'column'
+                                },
+                                tooltip: {
+                                    style: {
+                                        fontWeight: 'bold'
+                                    }
+                                }
+                            },
+                            loading: false,
+                            size: {
+                                width: setup.width,
+                                height: setup.height
+                            }
+                    };
+
+                    chartConfig.title = {};
+                    chartConfig.series = [];
+                    chartConfig.title.text = angular.uppercase(facetName);
+
+                    var chData = [];
+                    slice = {};
+                    for (var i=0; i<facetVal.length; i++) {
+                        if ( (i+2)%2 === 0) {
+                            if (facetVal[i] ===  'gap') {
+                                break;
+                            }
+                            slice.name = facetVal[i];
+                        } else {
+                            slice.y = facetVal[i];
+                            chData.push(slice);
+                            slice = {};
+                        }
+                    }
+                    chartConfig.series.push({id: searchTerm + "-" + facetName, name: "count", data: chData});
+                    chartConfigs.push(chartConfig);
+                }
+            });
+            return chartConfigs;
+        }
+    
+    }; // End of searchAll bracket
     
     
 });
