@@ -1,5 +1,5 @@
 {
-  "name": "datatron",
+  "name": "Cybertron",
   "version": "0.0.1",
   "devDependencies": {
     "angular": "~1.2",
@@ -9,7 +9,9 @@
     "angular-ui-router": "~0.2",
     "highcharts-ng": "~0.0.7",
     "highcharts": "~4.0.4",
-    "solstice": "~0.0.2"
+    "solstice": "~0.0.2",
+    "rdash-ui": "~1.0.1",
+    "angular-cookies": "~1.3.13"
   },
   "dependencies": {}
 }

@@ -12,7 +12,7 @@
  * The dependencies block here is also where component dependencies should be
  * specified, as shown below.
  */
-angular.module( 'datatron.home', [
+angular.module( 'cybertron.spyglass', [
   'ui.router',
   'plusOne'
 ])
@@ -23,22 +23,22 @@ angular.module( 'datatron.home', [
  * this way makes each module more "self-contained".
  */
 .config(function config( $stateProvider ) {
-  $stateProvider.state( 'home', {
-    url: '/home',
+  $stateProvider.state( 'spyglass', {
+    url: '/spyglass',
     views: {
       "main": {
-        controller: 'HomeCtrl',
-        templateUrl: 'home/home.tpl.html'
+        controller: 'SpyglassCtrl',
+        templateUrl: 'spyglass/spyglass.tpl.html'
       }
     },
-    data:{ pageTitle: 'Home' }
+    data:{ pageTitle: 'Spyglass' }
   });
 })
 
 /**
  * And of course we define a controller for our route.
  */
-.controller( 'HomeCtrl', function HomeController( $scope ) {
+.controller( 'SpyglassCtrl', function SpyglassController( $scope ) {
 })
 
 ;

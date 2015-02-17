@@ -69,11 +69,12 @@ module.exports = {
       'vendor/angular-ui-router/release/angular-ui-router.js',
       'vendor/angular-ui-utils/modules/route/route.js',
       'vendor/solstice/dist/solstice.js',
+      'vendor/angular-cookies/angular-cookies.min.js',
       'vendor/highcharts/highcharts.js',
       'vendor/highcharts-ng/dist/highcharts-ng.js'
     ],
     css: [
-      
+      'vendor/rdash-ui/dist/css/rdash.min.css'
     ],
     assets: [
        

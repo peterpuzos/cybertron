@@ -1,4 +1,4 @@
-angular.module( 'datatron.search.searchbox' , [])
+angular.module( 'cybertron.datatron.searchbox' , [])
 
 .directive('nitAdvancedSearchbox', function() {
         return {
@@ -9,7 +9,7 @@ angular.module( 'datatron.search.searchbox' , [])
                 searchAll: '=searchAll'
             },
             replace: true,
-            templateUrl: 'search/searchbox/searchbox.tpl.html',
+            templateUrl: 'datatron/searchbox/searchbox.tpl.html',
             controller: [
                 '$scope', '$attrs', '$element', '$timeout', '$filter',
                 function ($scope, $attrs, $element, $timeout, $filter) {

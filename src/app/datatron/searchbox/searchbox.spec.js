@@ -5,7 +5,7 @@
  */
 
 describe( 'searcbox', function() {
-  beforeEach( module( 'datatron.search.searchbox' ) );
+  beforeEach( module( 'cybertron.datatron.searchbox' ) );
 
   it( 'should have a dummy test', inject( function() {
     expect( true ).toBeTruthy();

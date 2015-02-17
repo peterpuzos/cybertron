@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="datatron" ng-controller="AppCtrl">
+<html ng-app="cybertron" ng-controller="AppCtrl">
   <head>
     <title ng-bind="pageTitle"></title>
 
@@ -7,16 +7,16 @@
     <meta content="utf-8" http-equiv="encoding">
     
     <!-- social media tags -->
-    <meta property="og:title" content="DataTron" />
+    <meta property="og:title" content="CyberTron" />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="http://datatron" />
+    <meta property="og:url" content="http://cybertron" />
     <meta property="og:description" content="Automating Data">
     
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- font awesome from BootstrapCDN -->
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
 
     <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
     <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
@@ -30,66 +30,119 @@
     </script>
   </head>
   <body>
-    <div class="container">
-      <div class="navbar navbar-default">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" ng-init="menuCollapsed = true"
-            ng-click="menuCollapsed = ! menuCollapsed">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <div class="navbar-brand">
-            DataTron
-            <small>
-                v<%= version %>
-            </small>
+        <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
+
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+          <ul class="sidebar">
+            <li class="sidebar-main">
+              <a ng-click="toggleSidebar()">
+                Cybertron
+                <span class="menu-icon fa fa-exchange"></span>
+              </a>
+            </li>
+            <li class="sidebar-title"><span>NAVIGATION</span></li>
+            <li class="sidebar-list">
+              <a href="#">Home <span class="menu-icon fa fa-home"></span></a>
+            </li>
+            <li class="sidebar-list">
+              <a href ui-sref="datatron">DataTron <span class="menu-icon fa fa-simplybuilt"></span></a>
+            </li>
+            <li class="sidebar-list">
+              <a href ui-sref="spyglass">SpyGlass <span class="menu-icon fa fa-camera"></span></a>
+            </li>
+          </ul>
+          <div class="sidebar-footer">
+            <div class="col-xs-4">
+              <a href="https://github.com/rdash/rdash-angular" target="_blank">
+                Github
+              </a>
+            </div>
+            <div class="col-xs-4">
+              <a href="https://github.com/rdash/rdash-angular/README.md" target="_blank">
+                About
+              </a>
+            </div>
+            <div class="col-xs-4">
+              <a href="#">
+                Support
+              </a>
+            </div>
           </div>
         </div>
-        <div class="collapse navbar-collapse" collapse="menuCollapsed">
-          <ul class="nav navbar-nav">
-            <li ui-sref-active="active">
-              <a href ui-sref="home">
-                <i class="fa fa-home"></i>
-                Home
-              </a>
-            </li>
-            <li ui-sref-active="active">
-              <a href ui-sref="search">
-                <i class="fa fa-search"></i>
-                Search
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
+        <!-- End Sidebar -->
 
-    <div class="container" ui-view="main"></div>
+        <div id="content-wrapper">
+          <div class="page-content">
 
-    <footer class="footer">
-      <div class="container">
-        <div class="footer-inner">
-          <ul class="social">
-            <li><a target="_blank" href="http://gplus.to/joshdmiller"><i class="fa fa-google-plus-sign"></i></a></li>
-            <li><a target="_blank" href="http://twitter.com/joshdmiller"><i class="fa fa-twitter-sign"></i></a></li>
-            <li><a target="_blank" href="http://linkedin.com/in/joshdmiller"><i class="fa fa-linkedin-sign"></i></a></li>
-            <li><a target="_blank" href="http://github.com/ngbp/ngbp"><i class="fa fa-github-sign"></i></a></li>
-          </ul>
-          
+            <!-- Header Bar -->
+            <div class="row header">
+              <div class="col-xs-12">
+                <div class="user pull-right">
+                  <div class="item dropdown">
+                    <a href="#" class="dropdown-toggle">
+                      <i class="fa fa-user"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li class="dropdown-header">
+                        Joe Bloggs
+                      </li>
+                      <li class="divider"></li>
+                      <li class="link">
+                        <a href="#">
+                          Profile
+                        </a>
+                      </li>
+                      <li class="link">
+                        <a href="#">
+                          Menu Item
+                        </a>
+                      </li>
+                      <li class="link">
+                        <a href="#">
+                          Menu Item
+                        </a>
+                      </li>
+                      <li class="divider"></li>
+                      <li class="link">
+                        <a href="#">
+                          Logout
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="item dropdown">
+                   <a href="#" class="dropdown-toggle">
+                      <i class="fa fa-bell-o"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                      <li class="dropdown-header">
+                        Notifications
+                      </li>
+                      <li class="divider"></li>
+                      <li>
+                        <a href="#">Server Down!</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="meta">
+                  <div class="page">
+                    Dashboard
+                  </div>
+                  <div class="breadcrumb-links">
+                    Home / Dashboard
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- End Header Bar -->
 
-          <p>
-            (c) 2015 <a href="#">DTD</a>. 
-            DataTron is based on
-            <a href="http://www.angularjs.org">AngularJS</a>,
-            <a href="http://getbootstrap.com">Bootstrap</a>, 
-            <a href="http://angular-ui.github.com/bootstrap">UI Bootstrap</a>,
-            and 
-            <a href="http://fortawesome.github.com/Font-Awesome">Font Awesome</a>.        
-          </p>
-        </div>
-      </div>
-    </footer>
+            <!-- Main Content -->
+            <div ui-view="main"></div>
+
+          </div><!-- End Page Content -->
+        </div><!-- End Content Wrapper -->
+      </div><!-- End Page Wrapper -->
   </body>
 </html>

@@ -1,8 +1,8 @@
-angular.module( 'datatron.search', [
+angular.module( 'cybertron.datatron', [
   'ui.router',
   'placeholders',
   'ui.bootstrap',
-  'datatron.search.searchbox',
+  'cybertron.datatron.searchbox',
   'solstice',
   'highcharts-ng'
 ])
@@ -25,19 +25,19 @@ angular.module( 'datatron.search', [
 .config(function config( $stateProvider, SolsticeProvider) {
   SolsticeProvider.setEndpoint('http://quickstart.cloudera:8983/solr/log_analytics_demo_shard1_replica1');  
     
-  $stateProvider.state( 'search', {
-    url: '/search',
+  $stateProvider.state( 'datatron', {
+    url: '/datatron',
     views: {
       "main": {
-        controller: 'SearchCtrl',
-        templateUrl: 'search/search.tpl.html'
+        controller: 'DatatronCtrl',
+        templateUrl: 'datatron/datatron.tpl.html'
       }
     },
-    data:{ pageTitle: 'Search' }
+    data:{ pageTitle: 'DataTron' }
   });
 })
 
-.controller( 'SearchCtrl', function SearchCtrl( $scope, $q, Solstice, setup) {
+.controller( 'DatatronCtrl', function DatatronCtrl( $scope, $q, Solstice, setup) {
     
     // $scope vars
     $scope.searchResult = "No Results";
@@ -133,8 +133,8 @@ angular.module( 'datatron.search', [
                 if (docs.length > 0) {
                     $scope.searchResult[key] = docs;
                     $scope.facetResult[key] = facets;
-                    $scope.graphPieResults[key] = drawPieGraphResults(key, facets);
-                    $scope.graphDateResults[key] = drawDateGraphResults(key, dateFacets);
+                    $scope.graphPieResults[key] = drawGraphResults(key, facets, "pie");
+                    $scope.graphDateResults[key] = drawGraphResults(key, dateFacets, "column");
                 } else {
                     $scope.searchResult[key] = null;
                     $scope.facetResult[key] = null;
@@ -145,19 +145,22 @@ angular.module( 'datatron.search', [
         
         
         // Creates facet graphs using HighCharts
-        function drawPieGraphResults(searchTerm,facets) {
+        function drawGraphResults(searchTerm,facets,chartType) {
             chartConfigs = [];
             angular.forEach(facets, function(facetVal, facetName) {
                 if (facetVal) {
                     
                     var chartConfig = {
                             chID: searchTerm + '-' + facetName,
+                            title: {
+                                text: angular.uppercase(facetName)
+                            },
                             //This is not a highcharts object. It just looks a little like one!
                             options: {
                                 //This is the Main Highcharts chart config. Any Highchart options are valid here.
                                 //will be ovverriden by values specified below.
                                 chart: {
-                                    type: 'pie'
+                                    type: chartType
                                 },
                                 tooltip: {
                                     style: {
@@ -175,84 +178,46 @@ angular.module( 'datatron.search', [
                             },
                             loading: false,
                             size: {
-                                width: setup.width,
-                                height: setup.height
+                                width: (chartType === 'pie') ? setup.width : setup.dateFacets.width,
+                                height: (chartType === 'pie') ? setup.height : setup.dateFacets.height
                             }
                     };
-
-                    chartConfig.title = {};
-                    chartConfig.series = [];
-
-                    chartConfig.title.text = angular.uppercase(facetName);
-
+                    
                     var chData = [];
                     slice = {};
-                    for (var i=0; i<facetVal.length; i++) {
-                        if ( (i+2)%2 === 0) {
-                            slice.name = facetVal[i];
-                        } else {
-                            slice.y = facetVal[i];
-                            chData.push(slice);
-                            slice = {};
-                        }
-                    }
-                    chartConfig.series.push({id: searchTerm + "-" + facetName, name: "count", data: chData});
-                    chartConfigs.push(chartConfig);
-                }
-            });
-            return chartConfigs;
-        }
-        
-        // Creates date facet graphs using HighCharts
-        function drawDateGraphResults(searchTerm, dateFacets) {
-            chartConfigs = [];
-            angular.forEach(dateFacets, function(facetVal, facetName) {
-                if (facetVal) {
-                    
-                    var chartConfig = {
-                            chID: searchTerm + '-' + facetName,
-                            //This is not a highcharts object. It just looks a little like one!
-                            options: {
-                                //This is the Main Highcharts chart config. Any Highchart options are valid here.
-                                //will be ovverriden by values specified below.
-                                chart: {
-                                    type: 'column'
-                                },
-                                tooltip: {
-                                    style: {
-                                        fontWeight: 'bold'
-                                    }
-                                }
-                            },
-                            loading: false,
-                            size: {
-                                width: setup.dateFacets.width,
-                                height: setup.dateFacets.height
-                            }
-                    };
-
-                    chartConfig.title = {};
                     chartConfig.series = [];
-                    chartConfig.xAxis = {};
-                    chartConfig.title.text = angular.uppercase(facetName);
 
-                    var chData = [];
-                    var breakVar = ['gap','start', 'end'];
-                    
-                    
-                    angular.forEach(facetVal, function(dateVal,dateKey) {
-                        if (breakVar.indexOf(dateKey) < 0) {
-                            splice = {};
-                            splice.name = dateKey;
-                            splice.y = dateVal;
-                            chData.push(splice);
-                        }
-                    });
-                    
-                    chartConfig.xAxis.type = 'category';
-                    chartConfig.xAxis.labels = {rotation: 90};
+                    switch(chartType) {
+                        case "pie":
+                            for (var i=0; i<facetVal.length; i++) {
+                                if ( (i+2)%2 === 0) {
+                                    slice.name = facetVal[i];
+                                } else {
+                                    slice.y = facetVal[i];
+                                    chData.push(slice);
+                                    slice = {};
+                                }
+                            }
+                            break;
+                        case "column":
+                            chartConfig.xAxis = {};
+                            chartConfig.xAxis.type = 'category';
+                            chartConfig.xAxis.labels = {rotation: 90};
+
+                            angular.forEach(facetVal, function(dateVal,dateKey) {
+                                if (['gap','start','end'].indexOf(dateKey) < 0) {
+                                    splice = {};
+                                    splice.name = dateKey;
+                                    splice.y = dateVal;
+                                    chData.push(splice);
+                                }
+                            });
+                            break;
+                        default:
+                    }
                     chartConfig.series.push({id: searchTerm + "-" + facetName, name: facetName, data: chData});
                     chartConfigs.push(chartConfig);
+
                 }
             });
             return chartConfigs;
