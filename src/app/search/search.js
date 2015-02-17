@@ -13,7 +13,9 @@ angular.module( 'datatron.search', [
     dateFacets: {   date:'time', 
                     date_start:'2014-05-04T00:00:00Z',
                     date_end:'2014-05-05T00:00:00Z',
-                    date_gap:'+1HOUR'
+                    date_gap:'+1HOUR',
+                    width: '800',
+                    height: '400'
                 },
     width: '300',
     height: '300'
@@ -224,30 +226,32 @@ angular.module( 'datatron.search', [
                             },
                             loading: false,
                             size: {
-                                width: setup.width,
-                                height: setup.height
+                                width: setup.dateFacets.width,
+                                height: setup.dateFacets.height
                             }
                     };
 
                     chartConfig.title = {};
                     chartConfig.series = [];
+                    chartConfig.xAxis = {};
                     chartConfig.title.text = angular.uppercase(facetName);
 
                     var chData = [];
-                    slice = {};
-                    for (var i=0; i<facetVal.length; i++) {
-                        if ( (i+2)%2 === 0) {
-                            if (facetVal[i] ===  'gap') {
-                                break;
-                            }
-                            slice.name = facetVal[i];
-                        } else {
-                            slice.y = facetVal[i];
-                            chData.push(slice);
-                            slice = {};
+                    var breakVar = ['gap','start', 'end'];
+                    
+                    
+                    angular.forEach(facetVal, function(dateVal,dateKey) {
+                        if (breakVar.indexOf(dateKey) < 0) {
+                            splice = {};
+                            splice.name = dateKey;
+                            splice.y = dateVal;
+                            chData.push(splice);
                         }
-                    }
-                    chartConfig.series.push({id: searchTerm + "-" + facetName, name: "count", data: chData});
+                    });
+                    
+                    chartConfig.xAxis.type = 'category';
+                    chartConfig.xAxis.labels = {rotation: 90};
+                    chartConfig.series.push({id: searchTerm + "-" + facetName, name: facetName, data: chData});
                     chartConfigs.push(chartConfig);
                 }
             });
