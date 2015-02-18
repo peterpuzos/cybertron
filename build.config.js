@@ -74,7 +74,8 @@ module.exports = {
       'vendor/highcharts-ng/dist/highcharts-ng.js'
     ],
     css: [
-      'vendor/rdash-ui/dist/css/rdash.min.css'
+      'vendor/font-awesome/css/font-awesome.css',
+      'vendor/rdash-ui/dist/css/rdash.css'
     ],
     assets: [
        

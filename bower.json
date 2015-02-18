@@ -11,7 +11,9 @@
     "highcharts": "~4.0.4",
     "solstice": "~0.0.2",
     "rdash-ui": "~1.0.1",
-    "angular-cookies": "~1.3.13"
+    "angular-cookies": "~1.3.13",
+    "font-awesome": "~4.3.0",
+    "ng-flow": "~2.6.0"
   },
   "dependencies": {}
 }

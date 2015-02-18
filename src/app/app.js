@@ -1,6 +1,7 @@
 angular.module( 'cybertron', [
   'templates-app',
   'templates-common',
+  'cybertron.home',
   'cybertron.spyglass',
   'cybertron.datatron',
   'ui.router',
@@ -8,7 +9,7 @@ angular.module( 'cybertron', [
 ])
 
 .config( function cybertronConfig ( $stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise( '/' );
+  $urlRouterProvider.otherwise( '/home' );
 })
 
 .run( function run () {
@@ -17,7 +18,7 @@ angular.module( 'cybertron', [
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location, $cookieStore ) {
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
       if ( angular.isDefined( toState.data.pageTitle ) ) {
-        $scope.pageTitle = toState.data.pageTitle + ' | Cybertron' ;
+        $scope.pageTitle = 'Cybertron | ' + toState.data.pageTitle;
       }
     });
   

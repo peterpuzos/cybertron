@@ -15,9 +15,6 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- font awesome from BootstrapCDN -->
-    <link href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" rel="stylesheet">
-
     <!-- compiled CSS --><% styles.forEach( function ( file ) { %>
     <link rel="stylesheet" type="text/css" href="<%= file %>" /><% }); %>
 
@@ -38,28 +35,28 @@
             <li class="sidebar-main">
               <a ng-click="toggleSidebar()">
                 Cybertron
-                <span class="menu-icon fa fa-exchange"></span>
+                <span class="menu-icon fa fa-bars"></span>
               </a>
             </li>
             <li class="sidebar-title"><span>NAVIGATION</span></li>
             <li class="sidebar-list">
-              <a href="#">Home <span class="menu-icon fa fa-home"></span></a>
+              <a ui-sref="home">Home <span class="menu-icon fa fa-home"></span></a>
             </li>
             <li class="sidebar-list">
-              <a href ui-sref="datatron">DataTron <span class="menu-icon fa fa-simplybuilt"></span></a>
+              <a ui-sref="datatron">DataTron <span class="menu-icon fa fa-simplybuilt"></span></a>
             </li>
             <li class="sidebar-list">
-              <a href ui-sref="spyglass">SpyGlass <span class="menu-icon fa fa-camera"></span></a>
+              <a ui-sref="spyglass">SpyGlass <span class="menu-icon fa fa-camera"></span></a>
             </li>
           </ul>
           <div class="sidebar-footer">
             <div class="col-xs-4">
-              <a href="https://github.com/rdash/rdash-angular" target="_blank">
-                Github
+              <a href="#" target="_blank">
+                Help
               </a>
             </div>
             <div class="col-xs-4">
-              <a href="https://github.com/rdash/rdash-angular/README.md" target="_blank">
+              <a href="#" target="_blank">
                 About
               </a>
             </div>
@@ -131,7 +128,7 @@
                     Dashboard
                   </div>
                   <div class="breadcrumb-links">
-                    Home / Dashboard
+                    {{pageTitle}}
                   </div>
                 </div>
               </div>
