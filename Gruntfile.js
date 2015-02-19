@@ -119,6 +119,16 @@ module.exports = function ( grunt ) {
           }
        ]   
       },
+      build_vendor_fonts: {
+        files: [
+          { 
+            src: [ '<%= vendor_files.fonts %>' ],
+            dest: '<%= build_dir %>/',
+            cwd: '.',
+            expand: true
+          }
+       ]   
+      },
       build_appjs: {
         files: [
           {
@@ -146,14 +156,6 @@ module.exports = function ( grunt ) {
             dest: '<%= build_dir %>/',
             cwd: '.',
             expand: true
-          },
-          {
-            //for font-awesome
-            cwd: 'vendor/font-awesome',
-            src: ['fonts/*.*'],
-            dest: '<%= build_dir %>',
-            dot: true,
-            expand: true
           }
         ]
       },
@@ -163,20 +165,6 @@ module.exports = function ( grunt ) {
             src: [ '**' ],
             dest: '<%= compile_dir %>/assets',
             cwd: '<%= build_dir %>/assets',
-            expand: true
-          },
-          {
-            src: [ '<%= vendor_files.css %>' ],
-            dest: '<%= compile_dir %>/',
-            cwd: '.',
-            expand: true
-          },
-          {
-            //for font-awesome
-            cwd: 'vendor/font-awesome',
-            src: ['fonts/*.*'],
-            dest: '<%= build_dir %>',
-            dot: true,
             expand: true
           }
         ]
@@ -190,7 +178,7 @@ module.exports = function ( grunt ) {
       /**
        * The `build_css` target concatenates compiled CSS and vendor CSS
        * together.
-       */
+       
       build_css: {
         src: [
           '<%= vendor_files.css %>',
@@ -198,6 +186,7 @@ module.exports = function ( grunt ) {
         ],
         dest: '<%= build_dir %>/assets/<%= pkg.name %>-<%= pkg.version %>.css'
       },
+      */
       /**
        * The `compile_js` target is the concatenation of our application source
        * code and all specified vendor source code into a single file.
@@ -503,7 +492,7 @@ module.exports = function ( grunt ) {
         files: [ 
           'src/assets/**/*'
         ],
-        tasks: [ 'copy:build_app_assets', 'copy:build_vendor_assets' ]
+        tasks: [ 'copy:build_app_assets', 'copy:build_vendor_assets','copy:build_vendor_fonts' ]
       },
 
       /**
@@ -585,7 +574,7 @@ module.exports = function ( grunt ) {
    */
   grunt.registerTask( 'build', [
     'clean', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build',
-    'concat:build_css', 'copy:build_app_assets', 'copy:build_vendor_assets',
+    'copy:build_app_assets', 'copy:build_vendor_assets', 'copy:build_vendor_fonts',
     'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_vendorcss', 'index:build', 'karmaconfig',
     'karma:continuous' 
   ]);

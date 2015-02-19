@@ -4,22 +4,9 @@ angular.module( 'cybertron.datatron', [
   'ui.bootstrap',
   'cybertron.datatron.searchbox',
   'solstice',
-  'highcharts-ng'
+  'highcharts-ng',
+  'ncy-angular-breadcrumb'
 ])
-
-.value('setup', {
-    queryField: 'record',
-    facetFields: ['extension', 'app', 'subapp'],
-    dateFacets: {   date:'time', 
-                    date_start:'2014-05-04T00:00:00Z',
-                    date_end:'2014-05-05T00:00:00Z',
-                    date_gap:'+1HOUR',
-                    width: '800',
-                    height: '400'
-                },
-    width: '300',
-    height: '300'
-})
 
 // config for defining controller and template
 .config(function config( $stateProvider, SolsticeProvider) {
@@ -33,8 +20,23 @@ angular.module( 'cybertron.datatron', [
         templateUrl: 'datatron/datatron.tpl.html'
       }
     },
-    data:{ pageTitle: 'DataTron' }
+    data:{ pageTitle: 'DataTron' },
+    ncyBreadcrumb: { label: 'DataTron', parent: 'home'}
   });
+})
+
+.value('setup', {
+    queryField: 'record',
+    facetFields: ['extension', 'app', 'subapp'],
+    dateFacets: {   date:'time', 
+                    date_start:'2014-05-04T00:00:00Z',
+                    date_end:'2014-05-05T00:00:00Z',
+                    date_gap:'+1HOUR',
+                    width: '800',
+                    height: '400'
+                },
+    width: '300',
+    height: '300'
 })
 
 .controller( 'DatatronCtrl', function DatatronCtrl( $scope, $q, Solstice, setup) {

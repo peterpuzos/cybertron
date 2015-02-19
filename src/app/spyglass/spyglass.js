@@ -14,6 +14,7 @@
  */
 angular.module( 'cybertron.spyglass', [
   'ui.router',
+  'ncy-angular-breadcrumb',
   'plusOne'
 ])
 
@@ -31,7 +32,8 @@ angular.module( 'cybertron.spyglass', [
         templateUrl: 'spyglass/spyglass.tpl.html'
       }
     },
-    data:{ pageTitle: 'Spyglass' }
+    data:{ pageTitle: 'Spyglass' },
+    ncyBreadcrumb: { label: 'Spyglass', parent: 'home'}
   });
 })
 

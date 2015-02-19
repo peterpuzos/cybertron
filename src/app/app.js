@@ -18,9 +18,13 @@ angular.module( 'cybertron', [
 .controller( 'AppCtrl', function AppCtrl ( $scope, $location, $cookieStore ) {
     $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
       if ( angular.isDefined( toState.data.pageTitle ) ) {
-        $scope.pageTitle = 'Cybertron | ' + toState.data.pageTitle;
+        $scope.pageTitle = toState.data.pageTitle;
       }
     });
+    
+    $scope.isActive = function (viewLocation) { 
+        return viewLocation === $location.path();
+    };
   
     /**
      * Sidebar Toggle & Cookie Control

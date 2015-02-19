@@ -1,5 +1,6 @@
 angular.module( 'cybertron.home', [
   'ui.router',
+  'ncy-angular-breadcrumb',
   'plusOne'
 ])
 
@@ -17,7 +18,8 @@ angular.module( 'cybertron.home', [
         templateUrl: 'home/home.tpl.html'
       }
     },
-    data:{ pageTitle: 'Home' }
+    data:{ pageTitle: 'Cybertron' },
+    ncyBreadcrumb: { label: 'Home'}
   });
 })
 

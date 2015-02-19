@@ -1,4 +1,13 @@
-<div class="row">
+<div class="page-content-wrapper">
+    
+    <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-10">
+                    <h2>{{pageTitle}}</h2>
+                    <div ncy-breadcrumb></div>
+                </div>
+    </div>
+    
+    <div class="row">
         <div class="col-sm-12">
             <nit-advanced-searchbox ng-model="searchParams" parameters="availableSearchParams" search-all="searchAll" placeholder="Search..."></nit-advanced-searchbox>
             <strong>Query Terms:</strong>
@@ -26,4 +35,6 @@
                 <highchart ng-repeat="graph in graphResult" id="{{graph.chID}}" config="graph" class="facetDate"></highchart>
             </div>
         </div>
+</div>
+    
 </div>
