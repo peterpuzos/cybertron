@@ -464,23 +464,26 @@ ul.sidebar .sidebar-list a {
   color: #b2bfdc;
   line-height: 40px;
 }
-ul.sidebar .sidebar-list a:hover {
-  color: #fff;
+ul.sidebar .sidebar-list:hover {
   border-left: 3px solid #e99d1a;
   text-indent: 22px;
 }
 
-ul.sidebar .sidebar-list a:hover .menu-icon {
+ul.sidebar .sidebar-list:hover a {
+  color: #fff;
+}
+
+ul.sidebar .sidebar-list:hover a .menu-icon {
   text-indent: 25px;
 }
 
 ul.sidebar .sidebar-list.active {
   border-left: 3px solid #e99d1a;
-  text-indent: 25px;
 }
 
 ul.sidebar .sidebar-list.active a {
     color: #FFF;
+    text-indent: 22px;
 }
 
 ul.sidebar .sidebar-list .menu-icon {
