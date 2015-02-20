@@ -1,10 +1,73 @@
 <div class="page-content-wrapper">
     
     <div class="row wrapper border-bottom white-bg page-heading">
-                <div class="col-lg-10">
-                    <h2>{{pageTitle}}</h2>
-                    <div ncy-breadcrumb></div>
-                </div>
+        <div class="col-lg-10">
+            <h2>{{pageTitle}}</h2>
+            <div ncy-breadcrumb></div>
+        </div>
     </div>
+        
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <select class="form-control" style="width: 150px; margin-bottom: 20px; display:inline-block;" ng-change="changeDashboard()" ng-model="selectedDashboardId" ng-options="d.id as d.name for d in dashboards | object2Array | orderBy:'id'">
+            </select>
+            <a class="btn btn-primary" ng-click="addWidget()"><i class="glyphicon glyphicon-plus"></i> Add Widget</a>
+            <a class="btn btn-warning" ng-click="clear()"><i class="glyphicon glyphicon-trash"></i> Clear</a>
+                
+            <div gridster="gridsterOptions">
+                <ul>
+                        <li gridster-item="dashboard.widgets[0]">
+                        <!-- li gridster-item="widget" ng-repeat="widget in dashboard.widgets" -->
+                            <div class="box" ng-controller="CustomWidgetCtrl">
+                                    <div class="box-header">
+                                        <h3><i class="{{ dashboard.widgets[0].icon }}"></i> {{ dashboard.widgets[0].name }}</h3>
+                                        <div class="box-header-btns pull-right">
+                                                <a title="settings" ng-click="openSettings(dashboard.widgets[0])"><i class="glyphicon glyphicon-cog"></i></a>
+                                                <a title="Remove widget" ng-click="remove(dashboard.widgets[0])"><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="box-content">
+                                        <div class="alert" flow-drop flow-drag-enter="class='alert-success'" flow-drag-leave="class=''" ng-class="class">
+                                          Drag And Drop your file here
+                                        </div>
+                                    </div>
+                            </div>
+                        </li>
+                        <li gridster-item="dashboard.widgets[1]">
+                        <!-- li gridster-item="widget" ng-repeat="widget in dashboard.widgets" -->
+                            <div class="box" ng-controller="CustomWidgetCtrl">
+                                    <div class="box-header">
+                                        <h3><i class="{{ dashboard.widgets[1].icon }}"></i> {{ dashboard.widgets[1].name }}</h3>
+                                        <div class="box-header-btns pull-right">
+                                                <a title="settings" ng-click="openSettings(dashboard.widgets[1])"><i class="glyphicon glyphicon-cog"></i></a>
+                                                <a title="Remove widget" ng-click="remove(dashboard.widgets[1])"><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="box-content">
+                                        
+                                    </div>
+                            </div>
+                        </li>
+                        <li gridster-item="dashboard.widgets[2]">
+                        <!-- li gridster-item="widget" ng-repeat="widget in dashboard.widgets" -->
+                            <div class="box" ng-controller="CustomWidgetCtrl">
+                                    <div class="box-header">
+                                        <h3><i class="{{ dashboard.widgets[2].icon }}"></i> {{ dashboard.widgets[2].name }}</h3>
+                                        <div class="box-header-btns pull-right">
+                                                <a title="settings" ng-click="openSettings(dashboard.widgets[2])"><i class="glyphicon glyphicon-cog"></i></a>
+                                                <a title="Remove widget" ng-click="remove(dashboard.widgets[2])"><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="box-content">
+                                        
+                                    </div>
+                            </div>
+                        </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+        
+    
     
 </div>

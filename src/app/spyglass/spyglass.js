@@ -1,28 +1,10 @@
-/**
- * Each section of the site has its own module. It probably also has
- * submodules, though this boilerplate is too simple to demonstrate it. Within
- * `src/app/home`, however, could exist several additional folders representing
- * additional modules that would then be listed as dependencies of this one.
- * For example, a `note` section could have the submodules `note.create`,
- * `note.delete`, `note.edit`, etc.
- *
- * Regardless, so long as dependencies are managed correctly, the build process
- * will automatically take take of the rest.
- *
- * The dependencies block here is also where component dependencies should be
- * specified, as shown below.
- */
 angular.module( 'cybertron.spyglass', [
   'ui.router',
   'ncy-angular-breadcrumb',
-  'plusOne'
+  'gridster',
+  'flow'
 ])
 
-/**
- * Each section or module of the site can also have its own routes. AngularJS
- * will handle ensuring they are all available at run-time, but splitting it
- * this way makes each module more "self-contained".
- */
 .config(function config( $stateProvider ) {
   $stateProvider.state( 'spyglass', {
     url: '/spyglass',
@@ -37,11 +19,117 @@ angular.module( 'cybertron.spyglass', [
   });
 })
 
-/**
- * And of course we define a controller for our route.
- */
-.controller( 'SpyglassCtrl', function SpyglassController( $scope ) {
+.filter('object2Array', function() {
+	return function(input) {
+		var out = [];
+		for (var i in input) {
+			out.push(input[i]);
+		}
+		return out;
+	};
 })
 
-;
+.controller( 'SpyglassCtrl', function SpyglassController( $scope, $timeout ) {
+    
+    $scope.gridsterOptions = {
+        margins: [20, 20],
+        columns: 4,
+        draggable: {
+                handle: '.box-header'
+        }
+    };
+
+    $scope.dashboards = {
+            '1': {
+                    id: '1',
+                    name: 'Search',
+                    widgets: [{
+                            col: 0,
+                            row: 0,
+                            sizeY: 1,
+                            sizeX: 1,
+                            icon: "fa fa-cloud-upload",
+                            name: "Upload"
+                    },
+                    {
+                            col: 1,
+                            row: 0,
+                            sizeY: 1,
+                            sizeX: 2,
+                            icon: "fa fa-file-image-o",
+                            name: "Image"
+                    },
+                    {
+                            col: 4,
+                            row: 0,
+                            sizeY: 1,
+                            sizeX: 1,
+                            icon: "fa fa-twitch",
+                            name: "Faces"
+                    }]
+            },
+            '2': {
+                    id: '2',
+                    name: 'Ingest',
+                    widgets: [{
+                            col: 1,
+                            row: 1,
+                            sizeY: 1,
+                            sizeX: 2,
+                            name: "Upload"
+                    }, {
+                            col: 1,
+                            row: 3,
+                            sizeY: 1,
+                            sizeX: 1,
+                            name: "Other Widget 2"
+                    }]
+            }
+    };
+
+    $scope.clear = function() {
+            $scope.dashboard.widgets = [];
+    };
+
+    $scope.addWidget = function() {
+            $scope.dashboard.widgets.push({
+                    name: "New Widget",
+                    sizeX: 1,
+                    sizeY: 1
+            });
+    };
+
+    $scope.$watch('selectedDashboardId', function(newVal, oldVal) {
+            if (newVal !== oldVal) {
+                    $scope.dashboard = $scope.dashboards[newVal];
+            } else {
+                    $scope.dashboard = $scope.dashboards[1];
+            }
+    });
+
+    // init dashboard
+    $scope.selectedDashboardId = '1';
+    
+})
+
+.controller('CustomWidgetCtrl', function CustomWidgetCtrl($scope, $modal) {
+
+    $scope.remove = function(widget) {
+            $scope.dashboard.widgets.splice($scope.dashboard.widgets.indexOf(widget), 1);
+    };
+
+    $scope.openSettings = function(widget) {
+            $modal.open({
+                    scope: $scope,
+                    templateUrl: 'demo/dashboard/widget_settings.html',
+                    controller: 'WidgetSettingsCtrl',
+                    resolve: {
+                            widget: function() {
+                                    return widget;
+                            }
+                    }
+            });
+    };
+
+});
 

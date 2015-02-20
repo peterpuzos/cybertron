@@ -72,10 +72,14 @@ module.exports = {
       'vendor/angular-cookies/angular-cookies.min.js',
       'vendor/angular-breadcrumb/dist/angular-breadcrumb.min.js',
       'vendor/highcharts/highcharts.js',
-      'vendor/highcharts-ng/dist/highcharts-ng.js'
+      'vendor/highcharts-ng/dist/highcharts-ng.js',
+      'vendor/javascript-detect-element-resize/jquery.resize.js',
+      'vendor/angular-gridster/dist/angular-gridster.min.js',
+      'vendor/ng-flow/dist/ng-flow.min.js'
     ],
     css: [
       'vendor/bootstrap/dist/css/bootstrap.min.css',
+      'vendor/angular-gridster/dist/angular-gridster.min.css',
       'vendor/font-awesome/css/font-awesome.min.css'
     ],
     assets: [
