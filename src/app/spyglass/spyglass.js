@@ -2,7 +2,7 @@ angular.module( 'cybertron.spyglass', [
   'ui.router',
   'ncy-angular-breadcrumb',
   'gridster',
-  'flow'
+  'angularFileUpload'
 ])
 
 .config(function config( $stateProvider ) {
@@ -46,7 +46,7 @@ angular.module( 'cybertron.spyglass', [
                     widgets: [{
                             col: 0,
                             row: 0,
-                            sizeY: 1,
+                            sizeY: 2,
                             sizeX: 1,
                             icon: "fa fa-cloud-upload",
                             name: "Upload"
@@ -54,7 +54,7 @@ angular.module( 'cybertron.spyglass', [
                     {
                             col: 1,
                             row: 0,
-                            sizeY: 1,
+                            sizeY: 2,
                             sizeX: 2,
                             icon: "fa fa-file-image-o",
                             name: "Image"
@@ -62,7 +62,7 @@ angular.module( 'cybertron.spyglass', [
                     {
                             col: 4,
                             row: 0,
-                            sizeY: 1,
+                            sizeY: 2,
                             sizeX: 1,
                             icon: "fa fa-twitch",
                             name: "Faces"
@@ -110,9 +110,36 @@ angular.module( 'cybertron.spyglass', [
     // init dashboard
     $scope.selectedDashboardId = '1';
     
+    
+    
 })
 
-.controller('CustomWidgetCtrl', function CustomWidgetCtrl($scope, $modal) {
+.controller('ImageUploadCtrl', function CustomWidgetCtrl($scope, $modal, $upload) {
+    
+    $scope.$watch('files', function () {
+        $scope.upload($scope.files);
+    });
+    
+    $scope.upload = function (files) {
+        if (files && files.length) {
+            angular.forEach(files, function(file) {
+                $upload.upload({
+                    url: 'https://angular-file-upload-cors-srv.appspot.com/upload',
+                    fields: {
+                        'username': $scope.username
+                    },
+                    file: file
+                }).progress(function (evt) {
+                    var progressPercentage = parseInt(100.0 * evt.loaded / evt.total, 10);
+                    console.log('progress: ' + progressPercentage + '% ' +
+                                evt.config.file.name);
+                }).success(function (data, status, headers, config) {
+                    console.log('file ' + config.file.name + 'uploaded. Response: ' +
+                                JSON.stringify(data));
+                });
+            });
+        }
+    };
 
     $scope.remove = function(widget) {
             $scope.dashboard.widgets.splice($scope.dashboard.widgets.indexOf(widget), 1);
@@ -121,7 +148,7 @@ angular.module( 'cybertron.spyglass', [
     $scope.openSettings = function(widget) {
             $modal.open({
                     scope: $scope,
-                    templateUrl: 'demo/dashboard/widget_settings.html',
+                    templateUrl: '',
                     controller: 'WidgetSettingsCtrl',
                     resolve: {
                             widget: function() {

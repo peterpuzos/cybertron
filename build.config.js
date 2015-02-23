@@ -75,7 +75,7 @@ module.exports = {
       'vendor/highcharts-ng/dist/highcharts-ng.js',
       'vendor/javascript-detect-element-resize/jquery.resize.js',
       'vendor/angular-gridster/dist/angular-gridster.min.js',
-      'vendor/ng-flow/dist/ng-flow.min.js'
+      'vendor/ng-file-upload/angular-file-upload.js'
     ],
     css: [
       'vendor/bootstrap/dist/css/bootstrap.min.css',
