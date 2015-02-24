@@ -14,24 +14,29 @@
             <a class="btn btn-primary" ng-click="addWidget()"><i class="glyphicon glyphicon-plus"></i> Add Widget</a>
             <a class="btn btn-warning" ng-click="clear()"><i class="glyphicon glyphicon-trash"></i> Clear</a>
                 
-            <div gridster="gridsterOptions" ng-controller="ImageUploadCtrl">
-                <ul>
+            <div gridster="gridsterOptions">
+                <ul ng-controller="ImageUploadCtrl">
                         <li gridster-item="dashboard.widgets[0]">
                         <!-- li gridster-item="widget" ng-repeat="widget in dashboard.widgets" -->
                             <div class="box">
                                     <div class="box-header">
                                         <h3><i class="{{ dashboard.widgets[0].icon }}"></i> {{ dashboard.widgets[0].name }}</h3>
                                         <div class="box-header-btns pull-right">
-                                                <a title="settings" ng-click="openSettings(dashboard.widgets[0])"><i class="glyphicon glyphicon-cog"></i></a>
-                                                <a title="Remove widget" ng-click="remove(dashboard.widgets[0])"><i class="glyphicon glyphicon-trash"></i></a>
+                                                <a title="Upload Selected" ng-click="openSettings(dashboard.widgets[0])"><i class="fa fa-cloud-upload"></i></a>
+                                                <a title="Remove all files" ng-click="removeAllFiles()"><i class="glyphicon glyphicon-trash"></i></a>
                                         </div>
                                     </div>
-                                    <div class="box-content">    
-                                        <div ng-file-drop ng-file-select ng-model="files" class="drop-box" 
-                                            drag-over-class="dragover" ng-multiple="true" allow-dir="true"
-                                            accept="image/*">Drop images here or click to upload</div>
+                                    <div class="box-content" ng-file-drop ng-model="uploads" drag-over-class="dragover" ng-multiple="true" allow-dir="true"
+                                         accept="image/*" ng-change="addFiles(uploads)">
                                         <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>        
-                                        
+                                        <ul class="list-group" ng-if="files.length > 0">
+                                            <li class="list-group-item" ng-repeat="file in files">
+                                                <i ng-thumb="{ file: file, width: 25, height: 25 }"></i> {{file.name}}
+                                                <button type="button" class="btn btn-xs btn-danger pull-right" ng-click="files.splice($index, 1)">
+                                                    <i class="fa fa-trash"></i>
+                                                </button>
+                                            </li>
+                                        </ul>
                                     </div>
                             </div>
                         </li>
@@ -46,9 +51,7 @@
                                         </div>
                                     </div>
                                     <div class="box-content">
-                                        <ul>
-                                            <li ng-repeat="f in files" style="font:smaller">{{f.name}}</li>
-                                        </ul>
+                                        
                                     </div>
                             </div>
                         </li>
@@ -67,6 +70,21 @@
                                     </div>
                             </div>
                         </li>
+<!--                        <li gridster-item="dashboard.widgets[3]">
+                         li gridster-item="widget" ng-repeat="widget in dashboard.widgets" 
+                            <div class="box">
+                                    <div class="box-header">
+                                        <h3><i class="{{ dashboard.widgets[3].icon }}"></i> {{ dashboard.widgets[3].name }}</h3>
+                                        <div class="box-header-btns pull-right">
+                                                <a title="settings" ng-click="openSettings(dashboard.widgets[3])"><i class="glyphicon glyphicon-cog"></i></a>
+                                                <a title="Remove widget" ng-click="remove(dashboard.widgets[3])"><i class="glyphicon glyphicon-trash"></i></a>
+                                        </div>
+                                    </div>
+                                    <div class="box-content">
+                                        
+                                    </div>
+                            </div>
+                        </li>-->
                 </ul>
             </div>
         </div>

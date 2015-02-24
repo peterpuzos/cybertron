@@ -32,7 +32,8 @@ angular.module( 'cybertron.spyglass', [
 .controller( 'SpyglassCtrl', function SpyglassController( $scope, $timeout ) {
     
     $scope.gridsterOptions = {
-        margins: [20, 20],
+        margins: [10, 10],
+        rowHeight: 250,
         columns: 4,
         draggable: {
                 handle: '.box-header'
@@ -46,23 +47,23 @@ angular.module( 'cybertron.spyglass', [
                     widgets: [{
                             col: 0,
                             row: 0,
-                            sizeY: 2,
+                            sizeY: 3,
                             sizeX: 1,
-                            icon: "fa fa-cloud-upload",
-                            name: "Upload"
+                            icon: "fa fa-folder-open",
+                            name: "Files"
                     },
                     {
                             col: 1,
                             row: 0,
-                            sizeY: 2,
+                            sizeY: 3,
                             sizeX: 2,
                             icon: "fa fa-file-image-o",
-                            name: "Image"
+                            name: "Images"
                     },
                     {
                             col: 4,
                             row: 0,
-                            sizeY: 2,
+                            sizeY: 3,
                             sizeX: 1,
                             icon: "fa fa-twitch",
                             name: "Faces"
@@ -106,7 +107,6 @@ angular.module( 'cybertron.spyglass', [
                     $scope.dashboard = $scope.dashboards[1];
             }
     });
-
     // init dashboard
     $scope.selectedDashboardId = '1';
     
@@ -114,11 +114,19 @@ angular.module( 'cybertron.spyglass', [
     
 })
 
-.controller('ImageUploadCtrl', function CustomWidgetCtrl($scope, $modal, $upload) {
-    
-    $scope.$watch('files', function () {
-        $scope.upload($scope.files);
-    });
+.controller('ImageUploadCtrl', function ImageUploadController($scope, $modal, $upload) {
+    $scope.files = [];
+       
+    $scope.addFiles = function(uploads) {
+        angular.forEach(uploads, function(f) {
+            console.log("adding files to files");
+            $scope.files.push(f);
+        });
+    };
+
+    $scope.removeAllFiles = function() {
+        $scope.files = [];
+    };
     
     $scope.upload = function (files) {
         if (files && files.length) {
@@ -152,11 +160,56 @@ angular.module( 'cybertron.spyglass', [
                     controller: 'WidgetSettingsCtrl',
                     resolve: {
                             widget: function() {
-                                    return widget;
+                                return widget;
                             }
                     }
             });
     };
 
-});
+})
+
+.directive('ngThumb', ['$window', function($window) {
+    var helper = {
+        support: !!($window.FileReader && $window.CanvasRenderingContext2D),
+        isFile: function(item) {
+            return angular.isObject(item) && item instanceof $window.File;
+        },
+        isImage: function(file) {
+            var type = '|' + file.type.slice(file.type.lastIndexOf('/') + 1) + '|';
+            return '|jpg|png|jpeg|bmp|gif|'.indexOf(type) !== -1;
+        }
+    };
+    
+    return {
+        restrict: 'A',
+        template: '<canvas/>',
+        link: function(scope, element, attributes) {
+            if (!helper.support) {return;}
+            
+            var params = scope.$eval(attributes.ngThumb);
+            
+            if (!helper.isFile(params.file)) {return;}
+            if (!helper.isImage(params.file)) {return;}
+            
+            var canvas = element.find('canvas');
+            var reader = new FileReader();
+            
+            reader.onload = onLoadFile;
+            reader.readAsDataURL(params.file);
+            
+            function onLoadFile(event) {
+                var img = new Image();
+                img.onload = onLoadImage;
+                img.src = event.target.result;
+            }
+            
+            function onLoadImage() {
+                var width = params.width || this.width / this.height * params.height;
+                var height = params.height || this.height / this.width * params.width;
+                canvas.attr({ width: width, height: height });
+                canvas[0].getContext('2d').drawImage(this, 0, 0, width, height);
+            }
+        }
+    };
+}]);
 
