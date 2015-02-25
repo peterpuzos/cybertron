@@ -28,51 +28,8 @@
   </head>
   <body>
         <div id="page-wrapper" ng-class="{'open': toggle}" ng-cloak>
-
-        <!-- Sidebar -->
-        <div id="sidebar-wrapper">
-          <ul class="sidebar">
-            <li class="sidebar-main">
-              <a ng-click="toggleSidebar()">
-                Cybertron
-                <span class="menu-icon fa fa-bars"></span>
-              </a>
-            </li>
-            <li class="sidebar-title"><span>NAVIGATION</span></li>
-            <li ng-class="{ active: isActive('/home')}" class="sidebar-list">
-              <a ui-sref="home"><span class="menu-icon fa fa-home"></span>Home</a>
-            </li>
-            <li ng-class="{ active: isActive('/datatron')}" class="sidebar-list">
-              <a ui-sref="datatron"><span class="menu-icon fa fa-simplybuilt"></span>DataTron </a>
-            </li>
-            <li ng-class="{ active: isActive('/spyglass')}" class="sidebar-list">
-              <a ui-sref="spyglass"><span class="menu-icon fa fa-camera"></span>SpyGlass</a>
-            </li>
-          </ul>
-          <div class="sidebar-footer">
-            <div class="col-xs-4">
-              <a href="#" target="_blank">
-                Help
-              </a>
-            </div>
-            <div class="col-xs-4">
-              <a href="#" target="_blank">
-                About
-              </a>
-            </div>
-            <div class="col-xs-4">
-              <a href="#">
-                Support
-              </a>
-            </div>
-          </div>
-        </div>
-        <!-- End Sidebar -->
-
-        <div id="content-wrapper">
-          <div class="page-content">
-
-            <!-- Header Bar -->
+            
+        <!-- Header Bar -->
             <div class="row header">
               <div class="col-xs-12">
                 <div class="user pull-right">
@@ -128,6 +85,48 @@
             </div>
             <!-- End Header Bar -->
 
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+          <ul class="sidebar">
+            <li class="sidebar-main">
+              <a ng-click="toggleSidebar()">
+                Cybertron
+                <span class="menu-icon fa fa-bars"></span>
+              </a>
+            </li>
+            <li class="sidebar-title"><span>NAVIGATION</span></li>
+            <li ng-class="{ active: isActive('/home')}" class="sidebar-list">
+              <a ui-sref="home"><span class="menu-icon fa fa-home"></span>Home</a>
+            </li>
+            <li ng-class="{ active: isActive('/datatron')}" class="sidebar-list">
+              <a ui-sref="datatron"><span class="menu-icon fa fa-simplybuilt"></span>DataTron </a>
+            </li>
+            <li ng-class="{ active: isActive('/spyglass')}" class="sidebar-list">
+              <a ui-sref="spyglass"><span class="menu-icon fa fa-camera"></span>SpyGlass</a>
+            </li>
+          </ul>
+          <div class="sidebar-footer">
+            <div class="col-xs-4">
+              <a href="#" target="_blank">
+                Help
+              </a>
+            </div>
+            <div class="col-xs-4">
+              <a href="#" target="_blank">
+                About
+              </a>
+            </div>
+            <div class="col-xs-4">
+              <a href="#">
+                Support
+              </a>
+            </div>
+          </div>
+        </div>
+        <!-- End Sidebar -->
+
+        <div id="content-wrapper">
+          <div class="page-content">
             <!-- Main Content -->
             <div ui-view="main"></div>
 
