@@ -93,7 +93,11 @@ form {
 }
 
 .drop-box {
-    background: #F8F8F8;
+    -webkit-transition: background-color 500ms ease-in; /* Saf3.2+, Chrome */
+    -moz-transition: background-color 500ms ease-in; /* FF3.7+ */
+    -o-transition: background-color 500ms ease-in; /* Opera 10.5+ */
+    transition: background-color 500ms ease-in; /* futureproofing */
+    background-color: #78776C;
     border: 5px dashed #DDD;
     width: inherit;
     height: 100%;
@@ -102,6 +106,6 @@ form {
     margin: 10px;
 }
 .dragover {
-    background: #428BCA;
+    background-color: #F6F7ED;
 }
 

@@ -115,17 +115,24 @@ angular.module( 'cybertron.spyglass', [
 })
 
 .controller('ImageUploadCtrl', function ImageUploadController($scope, $modal, $upload) {
-    $scope.files = [];
+    $scope.files = {};
        
     $scope.addFiles = function(uploads) {
         angular.forEach(uploads, function(f) {
-            console.log("adding files to files");
-            $scope.files.push(f);
+            if ((f.name in $scope.files)) {
+                $scope.files[f.name].error = "Error: File already exists!";
+            } else {
+                $scope.files[f.name] = f;
+            }
         });
     };
 
     $scope.removeAllFiles = function() {
-        $scope.files = [];
+        $scope.files = {};
+    };
+    
+    $scope.removeFile = function(filename) {
+        delete $scope.files[filename];
     };
     
     $scope.upload = function (files) {

@@ -22,21 +22,37 @@
                                     <div class="box-header">
                                         <h3><i class="{{ dashboard.widgets[0].icon }}"></i> {{ dashboard.widgets[0].name }}</h3>
                                         <div class="box-header-btns pull-right">
-                                                <a title="Upload Selected" ng-click="openSettings(dashboard.widgets[0])"><i class="fa fa-cloud-upload"></i></a>
+                                            
+                                                <a title="Add Files" ng-file-select ng-model="uploads" ng-change="addFiles(uploads)"
+                                                 ng-multiple="true" allow-dir="true" accept="image/*"  ><i class="fa fa-plus"></i></a>
                                                 <a title="Remove all files" ng-click="removeAllFiles()"><i class="glyphicon glyphicon-trash"></i></a>
                                         </div>
                                     </div>
                                     <div class="box-content" ng-file-drop ng-model="uploads" drag-over-class="dragover" ng-multiple="true" allow-dir="true"
                                          accept="image/*" ng-change="addFiles(uploads)">
-                                        <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>        
-                                        <ul class="list-group" ng-if="files.length > 0">
-                                            <li class="list-group-item" ng-repeat="file in files">
-                                                <i ng-thumb="{ file: file, width: 25, height: 25 }"></i> {{file.name}}
-                                                <button type="button" class="btn btn-xs btn-danger pull-right" ng-click="files.splice($index, 1)">
-                                                    <i class="fa fa-trash"></i>
-                                                </button>
-                                            </li>
-                                        </ul>
+                                        <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>
+                                        
+                                        <table class="table table-striped" ng-show="files">
+                                            <tbody>
+                                                <tr class="ng-scope" ng-repeat="(filename, file) in files">
+                                                    <td>
+                                                        <div ng-thumb="{ file: file, width: 32, height: 32 }"></div>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{filename}}</p>
+                                                        <span ng-show="file.error" class="error text-danger ng-binding">{{file.error}}</span>
+                                                    </td>
+                                                    <td>
+                                                        <p>{{(file.size / 1024).toFixed(2)}} KB</p>
+                                                    </td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-xs btn-danger" ng-click="removeFile(filename)">
+                                                            <i class="glyphicon glyphicon-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                             </div>
                         </li>
