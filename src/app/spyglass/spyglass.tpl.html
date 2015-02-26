@@ -32,9 +32,10 @@
                                          accept="image/*" ng-change="addFiles(uploads)">
                                         <div ng-no-file-drop>File Drag/Drop is not supported for this browser</div>
                                         
-                                        <table class="table table-striped" ng-show="files">
+                                        <table class="table table-hover" ng-show="files">
                                             <tbody>
-                                                <tr class="ng-scope" ng-repeat="(filename, file) in files">
+                                                <tr class="ng-scope" ng-repeat="(filename, file) in files"
+                                                    ng-click="file.$selected = !file.$selected; changeSelection(file)" ng-class="{'active': file.$selected}">
                                                     <td>
                                                         <div ng-thumb="{ file: file, width: 32, height: 32 }"></div>
                                                     </td>

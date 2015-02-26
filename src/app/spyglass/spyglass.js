@@ -116,6 +116,7 @@ angular.module( 'cybertron.spyglass', [
 
 .controller('ImageUploadCtrl', function ImageUploadController($scope, $modal, $upload) {
     $scope.files = {};
+    $scope.selectedFiles = {};
        
     $scope.addFiles = function(uploads) {
         angular.forEach(uploads, function(f) {
@@ -158,6 +159,15 @@ angular.module( 'cybertron.spyglass', [
 
     $scope.remove = function(widget) {
             $scope.dashboard.widgets.splice($scope.dashboard.widgets.indexOf(widget), 1);
+    };
+    
+    $scope.changeSelection = function(file) {
+        if (file.$selected) {
+            $scope.selectedFiles[file.name] = file;
+        } else {
+            delete $scope.selectedFiles[file.name];
+        }
+        console.info($scope.selectedFiles);
     };
 
     $scope.openSettings = function(widget) {

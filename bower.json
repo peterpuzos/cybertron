@@ -16,7 +16,8 @@
     "open-sans-fontface": "~1.2.1",
     "angular-breadcrumb": "~0.3.3",
     "angular-gridster": "~0.11.7",
-    "ng-file-upload": "~3.0.7"
+    "ng-file-upload": "~3.0.7",
+    "ng-table": "~0.5.2"
   },
   "dependencies": {}
 }
