@@ -125,6 +125,7 @@ angular.module( 'cybertron.spyglass', [
             } else {
                 $scope.files[f.name] = f;
             }
+            console.log($scope.files[f.name]);
         });
     };
 
